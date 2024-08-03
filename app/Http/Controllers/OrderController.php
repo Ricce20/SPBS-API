@@ -28,6 +28,7 @@ class OrderController extends Controller
             //     return redirect()->route('login');}
 
             $orders = Order::where('user_id',$id)->get();
+            
             return response()->json(['orders'=> $orders]);
         }
 
@@ -91,7 +92,7 @@ class OrderController extends Controller
             $order->time = now();
             $order->phone = $request->phone;
             $order->address = $request->address;
-            $order->status = 'Pendiente';
+            $order->status = 'Pagado';
             $order->user_id = $request->user_id;
             $order->save();
 

@@ -9,6 +9,21 @@ class ProductController extends Controller
 {
     public function index(){
         $products = Product::with('supplier')->where('status','ACTIVO')->get();
+        foreach ($products as $product) {
+            $product->image_1 = asset('/storage/' . $product->image_1);
+            $product->image_2 = asset('/storage/' . $product->image_2);
+            $product->image_3 = asset('/storage/' . $product->image_3);
+            
+        }
+        return response()->json(['products' => $products]);
+    }
+
+    public function indexCat(){
+        $products = Product::where('status','Activo')->get();
+        foreach ($products as $product) {
+            $product->image_1 = asset('/storage/' . $product->image_1);
+            
+        }
         return response()->json(['products' => $products]);
     }
 
@@ -102,29 +117,33 @@ class ProductController extends Controller
     
         $product->save();
     
-            if ($request->hasFile('image1')) {
-                $extension = $request->image1->extension();
-                $new_name='product_'.$product->id.'_1.'.$extension;
-                $path = $request->image1->storeAs('/images/products', $new_name, 'public');
-                $product->image_1=$path;
-                $product->save();
-            }
+        if ($request->hasFile('image1')) {
+
+            $extension = $request->image1->extension();
+            $new_name = 'product_-' . $product->id . '_1.' . $extension;
+            $path = $request->image1->storeAs('/images/products', $new_name, 'public');
+            $product->image_1 = $path;
+            $product->save();
+        }
+
+        if ($request->hasFile('image2')) {
+
+        $extension = $request->image2->extension();
+        $new_name = 'product_-' . $product->id . '_2.' . $extension;
+        $path = $request->image2->storeAs('/images/products', $new_name, 'public');
+        $product->image_2 = $path;
+        $product->save();
+    }
     
-            if ($request->hasFile('image2')) {
-                $extension = $request->image2->extension();
-                $new_name='product_'.$product->id.'_2.'.$extension;
-                $path = $request->image2->storeAs('/images/products', $new_name, 'public');
-                $product->image_2=$path;
-                $product->save();
-            }
-            
-            if ($request->hasFile('image3')) {
-                $extension = $request->image3->extension();
-                $new_name='product_'.$product->id.'_3.'.$extension;
-                $path = $request->image3->storeAs('/images/products', $new_name, 'public');
-                $product->image_3=$path;
-                $product->save();
-            }
+
+    if ($request->hasFile('image3')) {
+
+        $extension = $request->image3->extension();
+        $new_name = 'product_-' . $product->id . '_3.' . $extension;
+        $path = $request->image3->storeAs('/images/products', $new_name, 'public');
+        $product->image_3 = $path;
+        $product->save();
+    }
     
             return response()->json(['success'=> 'Producto Actuualizado']);
         } catch (\Exception $e) {

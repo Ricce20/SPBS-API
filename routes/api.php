@@ -27,6 +27,7 @@ use App\Http\Controllers\Auth\AuthController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/cat',[ProductController::class,'indexCat'])->name('product.cat');
 //AUTH
 Route::post('/register',[AuthController::class,'register'])->name('auth.register');
 Route::post('/login',[AuthController::class,'login'])->name('auth.login');
