@@ -10,6 +10,9 @@ class SupplierController extends Controller
 
     public function index(){
         $suppliers = Supplier::where('status','ACTIVO')->get();
+        foreach($suppliers as $supplier){
+            $supplier->image = asset('/storage/'.$supplier->image);
+        }
         return response()->json(['suppliers'=>$suppliers]);
         //return view('/suppliers/index')->with('suppliers', Supplier::where('status', 'Activo')->get());
     }

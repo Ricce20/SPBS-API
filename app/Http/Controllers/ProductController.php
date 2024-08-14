@@ -157,6 +157,11 @@ class ProductController extends Controller
     if(!$product){
         return response()->json(['error'=>'Producto No Encontrado']);
     }
+    $product->image_1 = asset('/storage/' . $product->image_1);
+    $product->image_2 = asset('/storage/' . $product->image_2);
+    $product->image_3 = asset('/storage/' . $product->image_3);
+
+    
     return response()->json(['product'=> $product]);
 }
 

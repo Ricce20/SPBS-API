@@ -27,7 +27,7 @@ class OrderController extends Controller
             //     {
             //     return redirect()->route('login');}
 
-            $orders = Order::where('user_id',$id)->get();
+            $orders = Order::where('user_id',$id)->orderBy('time', 'desc')->get();
             
             return response()->json(['orders'=> $orders]);
         }
