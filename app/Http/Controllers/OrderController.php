@@ -11,6 +11,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Mail\OrderCreated;
+use App\Mail\OrderUpdate;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -95,6 +98,8 @@ class OrderController extends Controller
             $order->status = 'Pagado';
             $order->user_id = $request->user_id;
             $order->save();
+            // Enviar el correo de confirmación de la orden
+            Mail::to($request->user()->email)->send(new OrderCreated($order));
 
             return response()->json(['order' => $order]);
         }
@@ -139,6 +144,30 @@ class OrderController extends Controller
         
             // return view('/orders.index', compact('orders', 'message'));
         }
+
+        public function enviarOrden(Request $request, $id)
+    {
+        // Encuentra la orden por ID
+        $order = Order::with('user')->findOrFail($id);
+        
+        // Actualiza el estado de la orden a "Enviado"
+        $order->status = 'Enviado';
+        $order->save();
+
+        // Obtén los detalles de la orden
+        $detailsOrder = DetailOrder::with('product')->where('id_order', $id)->get();
+
+        // Obtén los datos del envío desde la solicitud
+        $shippingCompany = $request->shippingCompany;
+        $trackingNumber = $request->trackingNumber;
+
+        // Envía el correo con los detalles del envío
+        Mail::to($order->user->email)->send(new OrderUpdate($order, $shippingCompany, $trackingNumber, $detailsOrder));
+
+        // Retorna una respuesta en formato JSON
+        return response()->json(['message' => 'Correo enviado correctamente.']);
+    }
+
 
 
 }

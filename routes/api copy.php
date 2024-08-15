@@ -60,7 +60,6 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/orders/show/{id}',[OrderController::class,'prod'])->name('orders.show');
     Route::get('/admin/orders',[OrderController::class,'admin'])->name('admin.orders');//admin
     Route::post('/update-order/{id}', [OrderController::class, 'updateOrder'])->name('update.order');//estatus actualizar
-    Route::put('/enviarOrden/{id}', [OrderController::class, 'enviarOrden'])->name('enviarOrden');
 
     Route::post('/order_register',[OrderController::class,'createOrder'])->name('create.order');
     Route::post('/create_detail_order/{IdOrder}',[OrderController::class,'createDetailOrder'])->name('create.detail.order');

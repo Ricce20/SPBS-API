@@ -54,12 +54,16 @@ class AuthController extends Controller
                 $user->save();
             }
     
+            // Disparar el evento de registro para enviar el correo de verificación
+          //  event(new Registered($user));
+
             $token = $user->createToken('apiToken')->plainTextToken;
-    
+
             return response()->json([
                 'user' => $user,
                 'token' => $token,
-            ]);
+              //  'message' => 'Usuario registrado. Por favor, verifica tu correo electrónico.',
+            ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
